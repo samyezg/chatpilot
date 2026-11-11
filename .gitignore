@@ -51,3 +51,12 @@ app.*.map.json
 
 # Temporary inspection/preview check images (local scratch, not committed)
 /docs/screenshots/_*
+
+# Local crop/probe scratch scripts (not portfolio tooling)
+/tool/check_*.py
+/tool/inspect_*.py
+/tool/probe_*.py
+/tool/cleanup_*.py
+/tool/rename_raw.py
+/tool/scan_*.py
+/tool/verify_output_sizes.py
