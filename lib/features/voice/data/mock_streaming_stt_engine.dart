@@ -6,7 +6,7 @@ import 'package:chatpilot_app/features/voice/domain/streaming_stt_engine.dart';
 /// Offline demo — streams a canned phrase as growing prefixes.
 class MockStreamingSttEngine implements StreamingSttEngine {
   MockStreamingSttEngine({
-    this.phrase = '你好，这是 ChatPilot 流式听写演示。',
+    this.phrase = 'Hello, this is the ChatPilot streaming dictation demo.',
     this.charDelay = const Duration(milliseconds: 45),
   });
 

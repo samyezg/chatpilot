@@ -10,10 +10,10 @@ class VoiceSettingsStore {
 
   VoiceMode getMode() {
     final raw = _prefs.getString(modeKey);
-    if (raw == null || raw.isEmpty) return VoiceMode.auto;
+    if (raw == null || raw.isEmpty) return VoiceMode.device;
     return VoiceMode.values.firstWhere(
       (mode) => mode.name == raw,
-      orElse: () => VoiceMode.auto,
+      orElse: () => VoiceMode.device,
     );
   }
 

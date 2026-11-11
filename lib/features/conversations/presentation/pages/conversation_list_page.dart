@@ -7,6 +7,7 @@ import 'package:chatpilot_app/features/auth/presentation/auth_notifier.dart';
 import 'package:chatpilot_app/features/conversations/domain/conversation.dart';
 import 'package:chatpilot_app/features/conversations/presentation/conversations_notifier.dart';
 import 'package:chatpilot_app/features/persona/domain/persona.dart';
+import 'package:chatpilot_app/l10n/l10n_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +17,7 @@ class ConversationListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final ready = ref.watch(conversationsReadyProvider);
     final conversations = ref.watch(conversationsProvider);
     final signedIn = ref.watch(isSignedInProvider);
@@ -23,11 +25,11 @@ class ConversationListPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ChatPilot'),
+        title: Text(l10n.appTitle),
         actions: [
           IconButton(
             key: const ValueKey('open-settings'),
-            tooltip: 'Settings',
+            tooltip: l10n.settings,
             onPressed: () => context.push(AppRoutes.settings),
             icon: const Icon(Icons.settings_outlined),
           ),
@@ -37,7 +39,7 @@ class ConversationListPage extends ConsumerWidget {
         key: const ValueKey('new-chat'),
         onPressed: () => context.push(AppRoutes.persona),
         icon: const Icon(Icons.add),
-        label: const Text('New'),
+        label: Text(l10n.newChat),
       ),
       body: !ready
           ? const Center(child: CircularProgressIndicator())
@@ -70,15 +72,16 @@ class _SyncBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Material(
       color: AppColors.primary.withValues(alpha: 0.08),
       child: ListTile(
         dense: true,
         leading: const Icon(Icons.cloud_off_outlined, color: AppColors.primary),
-        title: const Text('Local only — sign in to sync'),
+        title: Text(l10n.localOnlyBanner),
         trailing: TextButton(
           onPressed: () => context.push(AppRoutes.signIn),
-          child: const Text('Sign in'),
+          child: Text(l10n.signIn),
         ),
       ),
     );
@@ -90,6 +93,7 @@ class _EmptyConversations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.lg),
@@ -99,14 +103,14 @@ class _EmptyConversations extends StatelessWidget {
             const Icon(Icons.forum_outlined, size: 48, color: AppColors.primary),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'No conversations yet',
+              l10n.noConversationsTitle,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(
-              'Tap New to pick a persona and start chatting in Mock mode.',
+              l10n.noConversationsBody,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.textSecondary,
@@ -127,6 +131,7 @@ class _ConversationTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final persona = Persona.byId(conversation.personaId);
 
     return Dismissible(
@@ -163,7 +168,7 @@ class _ConversationTile extends ConsumerWidget {
           ),
         ),
         trailing: Text(
-          formatRelativeTime(conversation.updatedAt),
+          formatRelativeTime(conversation.updatedAt, l10n: l10n),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: AppColors.textSecondary,
               ),
@@ -175,25 +180,26 @@ class _ConversationTile extends ConsumerWidget {
   }
 
   Future<void> _rename(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
     final controller = TextEditingController(text: conversation.title);
     final next = await showDialog<String>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Rename conversation'),
+          title: Text(l10n.renameConversation),
           content: TextField(
             controller: controller,
             autofocus: true,
-            decoration: const InputDecoration(labelText: 'Title'),
+            decoration: InputDecoration(labelText: l10n.title),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(l10n.cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(context, controller.text),
-              child: const Text('Save'),
+              child: Text(l10n.save),
             ),
           ],
         );

@@ -2,6 +2,20 @@
 
 All notable changes to ChatPilot are documented in this file.
 
+## 1.0.2 — 2026-11-11
+
+### Changed
+
+- Voice policy **no silent fake dictation**: default **Device STT**; Auto falls back to Whisper only (never Mock)
+- Mock STT remains an explicit Settings opt-in for demos
+
+## 1.0.1 — 2026-11-11
+
+### Added
+
+- Official ARB i18n (`en` / `zh`): follow system with English fallback, or lock language in Settings
+- Bilingual demo seeds (translator keeps EN↔ZH contrast), personas, relative time, Mock STT phrase
+
 ## 1.0.0 — 2026-11-11
 
 ### Added

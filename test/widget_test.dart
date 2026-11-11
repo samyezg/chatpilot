@@ -61,7 +61,10 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('conv-translator')));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('The weather is really nice today.'), findsOneWidget);
+    expect(
+      find.textContaining("It's such a lovely day outside."),
+      findsOneWidget,
+    );
     expect(find.byKey(const ValueKey('message-input')), findsOneWidget);
   });
 
@@ -99,4 +102,20 @@ void main() {
 
     expect(find.textContaining('DeepSeek · live SSE · key present'), findsOneWidget);
   });
+
+  testWidgets('settings can switch UI language to Chinese', (tester) async {
+    await pumpApp(tester);
+
+    await tester.tap(find.byKey(const ValueKey('open-settings')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('locale-preference')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('中文').last);
+    await tester.pumpAndSettle();
+
+    expect(find.text('设置'), findsWidgets);
+    expect(find.text('语言'), findsWidgets);
+  });
 }
+

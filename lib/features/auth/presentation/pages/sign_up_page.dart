@@ -4,6 +4,7 @@ import 'package:chatpilot_app/app/theme/app_tokens.dart';
 import 'package:chatpilot_app/features/auth/domain/auth_exception.dart';
 import 'package:chatpilot_app/features/auth/domain/auth_validators.dart';
 import 'package:chatpilot_app/features/auth/presentation/auth_notifier.dart';
+import 'package:chatpilot_app/l10n/l10n_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -30,15 +31,33 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     super.dispose();
   }
 
+  String? _emailMessage(AuthEmailIssue? issue) {
+    final l10n = context.l10n;
+    return switch (issue) {
+      AuthEmailIssue.empty => l10n.enterEmail,
+      AuthEmailIssue.invalid => l10n.enterValidEmail,
+      null => null,
+    };
+  }
+
+  String? _passwordMessage(AuthPasswordIssue? issue) {
+    final l10n = context.l10n;
+    return switch (issue) {
+      AuthPasswordIssue.empty => l10n.enterPassword,
+      AuthPasswordIssue.tooShort => l10n.passwordTooShort,
+      null => null,
+    };
+  }
+
   Future<void> _submit() async {
-    final emailError = AuthValidators.emailError(_email.text);
-    final passwordError = AuthValidators.passwordError(_password.text);
+    final emailIssue = AuthValidators.emailIssue(_email.text);
+    final passwordIssue = AuthValidators.passwordIssue(_password.text);
     setState(() {
-      _emailError = emailError;
-      _passwordError = passwordError;
+      _emailError = _emailMessage(emailIssue);
+      _passwordError = _passwordMessage(passwordIssue);
       _formError = null;
     });
-    if (emailError != null || passwordError != null) return;
+    if (emailIssue != null || passwordIssue != null) return;
 
     setState(() => _submitting = true);
     try {
@@ -57,20 +76,21 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: const Text('Create account')),
+      appBar: AppBar(title: Text(l10n.signUp)),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.md),
         children: [
           Text(
-            'Join ChatPilot',
+            l10n.joinChatPilot,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w800,
                 ),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Email + password. With Supabase configured, this creates a real Auth user for cloud sync.',
+            l10n.signUpBody,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textSecondary,
                   fontFamily: AppFonts.secondary,
@@ -81,7 +101,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             controller: _email,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              labelText: 'Email',
+              labelText: l10n.email,
               errorText: _emailError,
             ),
           ),
@@ -90,8 +110,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             controller: _password,
             obscureText: true,
             decoration: InputDecoration(
-              labelText: 'Password',
-              helperText: 'At least 6 characters',
+              labelText: l10n.password,
+              helperText: l10n.passwordHelper,
               errorText: _passwordError,
             ),
             onSubmitted: (_) => _submit(),
@@ -107,11 +127,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           FilledButton(
             key: const ValueKey('sign-up-submit'),
             onPressed: _submitting ? null : _submit,
-            child: Text(_submitting ? 'Creating…' : 'Create account'),
+            child: Text(_submitting ? l10n.creatingAccount : l10n.signUp),
           ),
           TextButton(
             onPressed: () => context.go(AppRoutes.signIn),
-            child: const Text('Back to sign in'),
+            child: Text(l10n.backToSignIn),
           ),
         ],
       ),

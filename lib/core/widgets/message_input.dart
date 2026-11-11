@@ -1,5 +1,6 @@
 import 'package:chatpilot_app/app/theme/app_colors.dart';
 import 'package:chatpilot_app/app/theme/app_tokens.dart';
+import 'package:chatpilot_app/l10n/l10n_ext.dart';
 import 'package:flutter/material.dart';
 
 class MessageInput extends StatelessWidget {
@@ -14,7 +15,7 @@ class MessageInput extends StatelessWidget {
     this.enabled = true,
     this.isListening = false,
     this.isSending = false,
-    this.hintText = 'Message…',
+    this.hintText,
   });
 
   final TextEditingController controller;
@@ -26,10 +27,11 @@ class MessageInput extends StatelessWidget {
   final bool enabled;
   final bool isListening;
   final bool isSending;
-  final String hintText;
+  final String? hintText;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return SafeArea(
       top: false,
       child: Padding(
@@ -63,7 +65,7 @@ class MessageInput extends StatelessWidget {
                           foregroundColor: AppColors.primary,
                         ),
                         icon: const Icon(Icons.mic_none_rounded),
-                        tooltip: 'Voice dictation',
+                        tooltip: l10n.voiceDictation,
                       ),
               ),
               const SizedBox(width: AppSpacing.xxs),
@@ -81,7 +83,9 @@ class MessageInput extends StatelessWidget {
                 },
                 onChanged: onTextChanged,
                 decoration: InputDecoration(
-                  hintText: isListening ? 'Listening…' : hintText,
+                  hintText: isListening
+                      ? l10n.listeningHint
+                      : (hintText ?? l10n.messageHint),
                 ),
               ),
             ),

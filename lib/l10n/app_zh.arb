@@ -1,0 +1,185 @@
+{
+  "@@locale": "zh",
+  "appTitle": "ChatPilot",
+  "settings": "设置",
+  "newChat": "新建",
+  "signIn": "登录",
+  "signOut": "退出登录",
+  "signUp": "创建账户",
+  "cancel": "取消",
+  "save": "保存",
+  "clear": "清除",
+  "chat": "聊天",
+  "copied": "已复制",
+  "email": "邮箱",
+  "password": "密码",
+  "title": "标题",
+  "language": "语言",
+  "languageSystem": "跟随系统",
+  "languageEnglish": "English",
+  "languageChinese": "中文",
+  "languageSectionHint": "跟随设备语言，或锁定为英文 / 中文。系统语言不在支持列表时回退英文。",
+  "localOnlyBanner": "仅本地 — 登录后可同步",
+  "noConversationsTitle": "还没有对话",
+  "noConversationsBody": "点「新建」选择人格，即可用 Mock 模式开始聊天。",
+  "renameConversation": "重命名对话",
+  "conversationNotFound": "找不到该对话",
+  "backToList": "返回列表",
+  "listeningWithEngine": "听写中 · {engine}",
+  "@listeningWithEngine": {
+    "placeholders": {
+      "engine": {"type": "String"}
+    }
+  },
+  "voiceFallback": "语音",
+  "addApiKeyFirst": "请先在设置中填写 {provider} API Key。",
+  "@addApiKeyFirst": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "generationStopped": "_(已停止生成)_",
+  "generationStoppedSuffix": "\n\n_(已停止)_",
+  "errorPrefix": "错误：{message}",
+  "@errorPrefix": {
+    "placeholders": {
+      "message": {"type": "String"}
+    }
+  },
+  "unexpectedError": "意外错误：{error}",
+  "@unexpectedError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "messageHint": "输入消息…",
+  "listeningHint": "正在听写…",
+  "voiceDictation": "语音听写",
+  "choosePersona": "选择人格",
+  "startChat": "开始聊天",
+  "syncChatPilot": "同步 ChatPilot",
+  "signInBody": "登录后可将对话同步到 Supabase。未登录时对话仅保存在本机。",
+  "signingIn": "正在登录…",
+  "joinChatPilot": "加入 ChatPilot",
+  "signUpBody": "邮箱 + 密码。已配置 Supabase 时会创建真实 Auth 用户用于云同步。",
+  "passwordHelper": "至少 6 个字符",
+  "creatingAccount": "正在创建…",
+  "backToSignIn": "返回登录",
+  "enterEmail": "请输入邮箱。",
+  "enterValidEmail": "请输入有效邮箱。",
+  "enterPassword": "请输入密码。",
+  "passwordTooShort": "密码至少 6 个字符。",
+  "accountAndSync": "账户与同步",
+  "supabaseConfigured": "已配置 Supabase。登录后可在多设备同步对话。",
+  "supabaseNotConfigured": "未配置 Supabase（本地 Fake Auth）。传入 --dart-define-from-file=.vscode/supabase.local.json 可启用云同步。",
+  "cloudSyncOn": "云同步已开启",
+  "localFakeSession": "本地模拟会话",
+  "syncNow": "立即同步",
+  "syncFinished": "同步完成",
+  "apiKeys": "API 密钥",
+  "apiKeysHint": "密钥仅保存在本机 SharedPreferences，不会打包或提交。每个在线模型需要对应厂商的 Key。",
+  "apiKeyLabel": "{provider} API 密钥",
+  "@apiKeyLabel": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "saveKey": "保存密钥",
+  "saving": "保存中…",
+  "statusKeyPresent": "状态：已保存密钥",
+  "statusNoKey": "状态：未填写密钥",
+  "apiKeySaved": "{provider} API 密钥已保存在本机",
+  "@apiKeySaved": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "apiKeyCleared": "{provider} API 密钥已清除",
+  "@apiKeyCleared": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "voiceDictationSection": "语音听写",
+  "voiceDictationHint": "默认真实听写（设备 STT）。Auto 可再试 Whisper。Mock（演示）仅手动选择——不会静默兜底灌字。",
+  "voiceEngine": "听写引擎",
+  "voiceModeAuto": "自动",
+  "voiceModeDevice": "设备 STT",
+  "voiceModeWhisper": "OpenAI Whisper",
+  "voiceModeMock": "Mock（演示）",
+  "voiceModeAutoSubtitle": "设备流式，其次 Whisper——绝不静默落到 Mock",
+  "voiceModeDeviceSubtitle": "系统语音识别，实时 partial",
+  "voiceModeWhisperSubtitle": "录音 → 转写（停止后出最终结果）",
+  "voiceModeMockSubtitle": "仅演示固定句，忽略麦克风（需显式选择）",
+  "localData": "本地数据",
+  "localDataHint": "对话保存在本机 SharedPreferences。重启后仍会保留。",
+  "resetDemo": "恢复演示对话",
+  "resetDemoDone": "已恢复演示对话",
+  "modelsSection": "模型",
+  "modelStatusLiveKeyPresent": "{provider} · 在线 SSE · 已有密钥",
+  "@modelStatusLiveKeyPresent": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "modelStatusLiveAddKey": "{provider} · 在线 SSE · 需填写密钥",
+  "@modelStatusLiveAddKey": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "modelStatusOfflineMock": "{provider} · 离线 Mock 流",
+  "@modelStatusOfflineMock": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "justNow": "刚刚",
+  "minutesAgo": "{count} 分钟前",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "hoursAgo": "{count} 小时前",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "yesterday": "昨天",
+  "daysAgo": "{count} 天前",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "personaGeneralName": "通用助手",
+  "personaGeneralSubtitle": "日常问答",
+  "personaTranslatorName": "翻译",
+  "personaTranslatorSubtitle": "中英互译",
+  "personaWriterName": "写作",
+  "personaWriterSubtitle": "润色 / 扩写 / 精简",
+  "personaEngineerName": "工程师",
+  "personaEngineerSubtitle": "讲解 / 评审 / 排错",
+  "personaTutorName": "导师",
+  "personaTutorSubtitle": "测验 / 教学 / 总结",
+  "seedTranslatorTitle": "翻译",
+  "seedEngineerTitle": "代码评审",
+  "seedWriterTitle": "写作",
+  "seedGeneralTitle": "闲聊",
+  "seedTranslatorUser1": "帮我翻译：今天天气真好。",
+  "seedTranslatorUser2": "再润色一下，更自然。",
+  "seedEngineerUser1": "这段 Dart 有 null 风险吗？`user!.name`",
+  "seedEngineerAssistant1": "有。优先用 `user?.name` 或先判空，避免运行时崩溃。",
+  "seedEngineerUser2": "给个安全写法示例。",
+  "seedEngineerAssistant2": "```dart\nfinal name = user?.name ?? \"Guest\";\n```",
+  "seedWriterUser1": "帮我润色这封邮件开头。",
+  "seedWriterAssistant1": "Hi Alex — quick note to follow up on yesterday’s demo.",
+  "seedWriterUser2": "再正式一点。",
+  "seedWriterAssistant2": "Dear Alex, I am writing to follow up on our demonstration yesterday.",
+  "seedGeneralUser1": "ChatPilot 能做什么？",
+  "seedGeneralAssistant1": "可以聊天、切换人格，登录后还可同步历史。演示种子默认走 Mock。",
+  "seedGeneralUser2": "不错，继续。",
+  "mockSttPhrase": "你好，这是 ChatPilot 流式听写演示。"
+}

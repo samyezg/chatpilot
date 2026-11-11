@@ -1,21 +1,20 @@
 import 'package:chatpilot_app/features/voice/data/device_streaming_stt_engine.dart';
-import 'package:chatpilot_app/features/voice/data/mock_streaming_stt_engine.dart';
 import 'package:chatpilot_app/features/voice/data/whisper_stt_engine.dart';
 import 'package:chatpilot_app/features/voice/domain/stt_update.dart';
 import 'package:chatpilot_app/features/voice/domain/streaming_stt_engine.dart';
 import 'package:chatpilot_app/features/voice/domain/voice_exception.dart';
 
-/// Resolves Device → Whisper → Mock at [start] time.
+/// Resolves Device → Whisper at [start] time.
+///
+/// Never falls back to Mock — policy: no silent fake dictation.
 class AutoStreamingSttEngine implements StreamingSttEngine {
   AutoStreamingSttEngine({
     required this.device,
     required this.whisper,
-    required this.mock,
   });
 
   final DeviceStreamingSttEngine device;
   final WhisperSttEngine whisper;
-  final MockStreamingSttEngine mock;
 
   StreamingSttEngine? _active;
 
@@ -23,12 +22,19 @@ class AutoStreamingSttEngine implements StreamingSttEngine {
   String get label => _active?.label ?? 'Auto';
 
   @override
-  Future<bool> isAvailable() async => true;
+  Future<bool> isAvailable() async {
+    if (await device.isAvailable()) return true;
+    return whisper.isAvailable();
+  }
 
   Future<StreamingSttEngine> _pick() async {
     if (await device.isAvailable()) return device;
     if (await whisper.isAvailable()) return whisper;
-    return mock;
+    throw const VoiceException(
+      'No real speech engine available. Enable Device STT permissions, '
+      'add an OpenAI key for Whisper, or explicitly choose Mock (demo) '
+      'in Settings.',
+    );
   }
 
   @override
@@ -56,6 +62,5 @@ class AutoStreamingSttEngine implements StreamingSttEngine {
   Future<void> dispose() async {
     await device.dispose();
     await whisper.dispose();
-    await mock.dispose();
   }
 }

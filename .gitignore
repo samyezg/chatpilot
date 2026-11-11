@@ -45,3 +45,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Portfolio screenshots: raw unedited captures stay local, not committed
+/docs/screenshots/raw/
+
+# Temporary inspection/preview check images (local scratch, not committed)
+/docs/screenshots/_*

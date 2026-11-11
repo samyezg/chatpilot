@@ -1,8 +1,11 @@
+import 'dart:ui' show PlatformDispatcher;
+
 import 'package:chatpilot_app/app/config/app_environment_provider.dart';
 import 'package:chatpilot_app/features/chat/domain/ai_model.dart';
 import 'package:chatpilot_app/features/chat/domain/message.dart';
 import 'package:chatpilot_app/features/conversations/data/in_memory_conversations_repository.dart';
 import 'package:chatpilot_app/features/conversations/data/local_conversations_repository.dart';
+import 'package:chatpilot_app/features/conversations/data/mock_conversations_seed.dart';
 import 'package:chatpilot_app/features/conversations/data/supabase_conversations_sync.dart';
 import 'package:chatpilot_app/features/conversations/data/syncing_conversations_repository.dart';
 import 'package:chatpilot_app/features/conversations/domain/conversation.dart';
@@ -12,13 +15,25 @@ import 'package:chatpilot_app/features/settings/presentation/settings_notifier.d
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+String _seedLanguageCode(Ref ref) {
+  final preference = ref.watch(settingsProvider).localePreference;
+  return resolveAppLanguageCode(
+    localePreference: preference,
+    platformLocale: PlatformDispatcher.instance.locale,
+  );
+}
+
 final conversationsRepositoryProvider = Provider<ConversationsRepository>((ref) {
   final prefs = ref.watch(sharedPreferencesProvider).asData?.value;
   if (prefs == null) {
     return InMemoryConversationsRepository(seed: const []);
   }
   ref.keepAlive();
-  final local = LocalConversationsRepository.load(prefs);
+  final languageCode = _seedLanguageCode(ref);
+  final local = LocalConversationsRepository.load(
+    prefs,
+    seedIfEmpty: buildMockConversations(languageCode: languageCode),
+  );
   final env = ref.watch(appEnvironmentProvider);
   if (!env.useSupabase) return local;
   return SyncingConversationsRepository(
@@ -46,14 +61,14 @@ class ConversationsNotifier extends Notifier<List<Conversation>> {
 
   Conversation? getById(String id) => _repo.getById(id);
 
-  Conversation createFromPersona(String personaId) {
+  Conversation createFromPersona(String personaId, {String? title}) {
     final persona = Persona.presets.firstWhere(
       (p) => p.id == personaId,
       orElse: () => Persona.presets.first,
     );
     final created = _repo.create(
       personaId: persona.id,
-      title: persona.name,
+      title: (title == null || title.trim().isEmpty) ? persona.name : title.trim(),
       model: AiModel.mock,
     );
     refresh();
@@ -86,11 +101,12 @@ class ConversationsNotifier extends Notifier<List<Conversation>> {
   }
 
   Future<void> resetToDemoSeed() async {
+    final seed = buildMockConversations(languageCode: _seedLanguageCode(ref));
     final repo = _repo;
     if (repo is SyncingConversationsRepository) {
-      await repo.clearAndReseed();
+      await repo.clearAndReseed(seed);
     } else if (repo is LocalConversationsRepository) {
-      await repo.clearAndReseed();
+      await repo.clearAndReseed(seed);
     }
     refresh();
   }

@@ -1,46 +1,55 @@
 # Screenshots & demo capture
 
-Place portfolio assets here (avoid committing huge raw videos if hosted elsewhere).
+Portfolio stills and a short streaming GIF for README / social. Raw phone captures stay local (`raw/` is gitignored).
 
 ## Included
 
-- `stream_demo.gif` — looping Mock typewriter streaming (coral UI mockup for README)
+| Path | Purpose |
+| :--- | :--- |
+| `stream_demo.gif` | Looping Mock typewriter stream (README hero) |
+| `architecture.png` | High-level module diagram |
+| `fiverr/` | 4×3 crops for marketplace / README gallery |
+| `instagram/` | 4×5 crops for vertical social |
+| `chengjubao/` | 16×9 crops for landscape decks |
 
-## Suggested stills (phone frame, English UI)
+## Suggested stills (English UI)
 
-1. `01_conversation_list.png` — seeded chats + relative times  
-2. `02_chat_stream.png` — bubbles + streaming / Markdown reply  
-3. `03_persona_picker.png` — five persona cards  
-4. `04_model_selector.png` — Mock / DeepSeek / GPT-4o / Claude / Gemini  
- 
-5. `05_settings_keys.png` — API keys + voice engine  
-6. `06_mock_mode.png` — offline mock typewriter reply  
-7. `07_sign_in.png` — sync sign-in form  
-8. `08_sync_banner.png` — “Local only — sign in to sync” banner  
-9. `09_voice_listening.png` — mic listening + partial dictation  
+1. Conversation list  
+2. Chat (Translator / stream)  
+3. Persona picker  
+4. Model selector  
+5. Settings overview / API keys  
+6. Models status  
+7. Voice engine  
+8. Language selector  
+9. Sign in  
+10. Voice listening (optional)
 
 ## 30–60s demo script
 
 1. Open list → tap **Translator** seed chat → show history  
 2. Send a short message on **Mock** → show typewriter stream  
-3. Tap mic (Mock voice) → show streaming dictation → Stop → Send  
+3. Tap mic (**Device** or **Whisper**) → show listening / partials → Stop → Send  
 4. While assistant streams → tap **Stop** to interrupt generation  
 5. Settings → API keys + voice engine (do not reveal real keys)  
 6. Optional: DeepSeek / other live model with key  
-7. Optional: Sign in banner → Sign in screen (Supabase configured builds)
+7. Optional: Sign in banner → Sign in screen (Supabase-configured builds)
 
-## Commands
+## Local regen (maintainers)
 
-```powershell
-. D:\AI\12-落地\工具\android_sdk_env.ps1
-cd D:\AI\12-落地\作品集\02_AI聊天机器人\app
+From this repo root (or your private working copy):
+
+```bash
+flutter pub get
 flutter run
 # with cloud sync:
 flutter run --dart-define-from-file=.vscode/supabase.local.json
 ```
 
-Release APK (ASCII artifacts path, if script present):
+Optional image tooling in `tool/`:
 
-```powershell
-. D:\AI\12-落地\工具\flutter_build_apk.ps1 -AppDir "D:\AI\12-落地\作品集\02_AI聊天机器人\app" -AppId chatpilot -Release
-```
+- `make_stream_gif.py` — README GIF  
+- `build_architecture_diagram.py` — architecture PNG  
+- `build_portfolio_images.py` — platform crops from raw captures  
+
+Do not commit `raw/` or temporary `_*.png` probe files.

@@ -8,6 +8,7 @@ import 'package:chatpilot_app/features/conversations/presentation/conversations_
 import 'package:chatpilot_app/features/settings/data/api_key_provider.dart';
 import 'package:chatpilot_app/features/settings/presentation/settings_notifier.dart';
 import 'package:chatpilot_app/features/voice/domain/voice_mode.dart';
+import 'package:chatpilot_app/l10n/l10n_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -56,7 +57,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           .saveKey(provider, _controllers[provider]!.text);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${provider.label} API key saved on this device')),
+        SnackBar(content: Text(context.l10n.apiKeySaved(provider.label))),
       );
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -68,12 +69,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     _controllers[provider]?.clear();
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${provider.label} API key cleared')),
+      SnackBar(content: Text(context.l10n.apiKeyCleared(provider.label))),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final settings = ref.watch(settingsProvider);
     final prefsAsync = ref.watch(sharedPreferencesProvider);
     final user = ref.watch(authProvider);
@@ -91,12 +93,45 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     });
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(l10n.settings)),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.md),
         children: [
           Text(
-            'Account & sync',
+            l10n.language,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            l10n.languageSectionHint,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textSecondary,
+                  fontFamily: AppFonts.secondary,
+                ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          DropdownButtonFormField<String>(
+            key: const ValueKey('locale-preference'),
+            // ignore: deprecated_member_use
+            value: settings.localePreference,
+            decoration: InputDecoration(labelText: l10n.language),
+            items: [
+              DropdownMenuItem(value: '', child: Text(l10n.languageSystem)),
+              DropdownMenuItem(value: 'en', child: Text(l10n.languageEnglish)),
+              DropdownMenuItem(value: 'zh', child: Text(l10n.languageChinese)),
+            ],
+            onChanged: (value) async {
+              if (value == null) return;
+              await ref
+                  .read(settingsProvider.notifier)
+                  .setLocalePreference(value);
+            },
+          ),
+          const SizedBox(height: AppSpacing.xl),
+          Text(
+            l10n.accountAndSync,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
@@ -104,8 +139,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           const SizedBox(height: AppSpacing.xs),
           Text(
             supabaseOn
-                ? 'Supabase is configured. Sign in to sync conversations across devices.'
-                : 'Supabase not configured (local Fake Auth). Pass --dart-define-from-file=.vscode/supabase.local.json to enable cloud sync.',
+                ? l10n.supabaseConfigured
+                : l10n.supabaseNotConfigured,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textSecondary,
                   fontFamily: AppFonts.secondary,
@@ -116,13 +151,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             FilledButton(
               key: const ValueKey('settings-sign-in'),
               onPressed: () => context.push(AppRoutes.signIn),
-              child: const Text('Sign in'),
+              child: Text(l10n.signIn),
             )
           else ...[
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(user.email),
-              subtitle: Text(supabaseOn ? 'Cloud sync on' : 'Local fake session'),
+              subtitle: Text(
+                supabaseOn ? l10n.cloudSyncOn : l10n.localFakeSession,
+              ),
             ),
             Row(
               children: [
@@ -135,10 +172,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           .syncFromCloud();
                       if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Sync finished')),
+                        SnackBar(content: Text(l10n.syncFinished)),
                       );
                     },
-                    child: const Text('Sync now'),
+                    child: Text(l10n.syncNow),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.sm),
@@ -146,22 +183,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   onPressed: () async {
                     await ref.read(authProvider.notifier).signOut();
                   },
-                  child: const Text('Sign out'),
+                  child: Text(l10n.signOut),
                 ),
               ],
             ),
           ],
           const SizedBox(height: AppSpacing.xl),
           Text(
-            'API keys',
+            l10n.apiKeys,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Keys stay in local SharedPreferences only — never bundled or committed. '
-            'Each live model needs its own provider key.',
+            l10n.apiKeysHint,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textSecondary,
                   fontFamily: AppFonts.secondary,
@@ -179,7 +215,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 hasKey: settings.hasKey(provider),
                 saving: _saving && _savingProvider == provider,
                 onToggleObscure: () {
-                  setState(() => _obscure[provider] = !(_obscure[provider] ?? true));
+                  setState(
+                    () => _obscure[provider] = !(_obscure[provider] ?? true),
+                  );
                 },
                 onSave: () => _save(provider),
                 onClear: () => _clear(provider),
@@ -187,14 +225,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               const SizedBox(height: AppSpacing.lg),
             ],
           Text(
-            'Voice dictation',
+            l10n.voiceDictationSection,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Streaming dictation with interrupt. Auto prefers device STT, then OpenAI Whisper, then Mock.',
+            l10n.voiceDictationHint,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textSecondary,
                   fontFamily: AppFonts.secondary,
@@ -205,12 +243,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             key: const ValueKey('voice-mode'),
             // ignore: deprecated_member_use
             value: settings.voiceMode,
-            decoration: const InputDecoration(labelText: 'Voice engine'),
+            decoration: InputDecoration(labelText: l10n.voiceEngine),
             items: [
               for (final mode in VoiceMode.values)
                 DropdownMenuItem(
                   value: mode,
-                  child: Text(mode.label),
+                  child: Text(l10n.voiceModeLabel(mode)),
                 ),
             ],
             onChanged: (mode) async {
@@ -220,21 +258,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            settings.voiceMode.subtitle,
+            l10n.voiceModeSubtitle(settings.voiceMode),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: AppColors.textSecondary,
                 ),
           ),
           const SizedBox(height: AppSpacing.xl),
           Text(
-            'Local data',
+            l10n.localData,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Conversations are saved on this device (SharedPreferences). Restart keeps your chats.',
+            l10n.localDataHint,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textSecondary,
                   fontFamily: AppFonts.secondary,
@@ -247,14 +285,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               await ref.read(conversationsProvider.notifier).resetToDemoSeed();
               if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Reset to demo conversations')),
+                SnackBar(content: Text(l10n.resetDemoDone)),
               );
             },
-            child: const Text('Reset to demo conversations'),
+            child: Text(l10n.resetDemo),
           ),
           const SizedBox(height: AppSpacing.xl),
           Text(
-            'Models',
+            l10n.modelsSection,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
@@ -267,9 +305,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               subtitle: Text(
                 model.needsApiKey
                     ? settings.hasKeyForModel(model)
-                        ? '${model.provider} · live SSE · key present'
-                        : '${model.provider} · live SSE · add key to use'
-                    : '${model.provider} · offline mock stream',
+                        ? l10n.modelStatusLiveKeyPresent(model.provider)
+                        : l10n.modelStatusLiveAddKey(model.provider)
+                    : l10n.modelStatusOfflineMock(model.provider),
               ),
               trailing: Icon(
                 model.needsApiKey
@@ -311,6 +349,7 @@ class _ApiKeyField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -326,7 +365,7 @@ class _ApiKeyField extends StatelessWidget {
           controller: controller,
           obscureText: obscure,
           decoration: InputDecoration(
-            labelText: '${provider.label} API key',
+            labelText: l10n.apiKeyLabel(provider.label),
             hintText: provider.hint,
             suffixIcon: IconButton(
               onPressed: onToggleObscure,
@@ -343,21 +382,19 @@ class _ApiKeyField extends StatelessWidget {
               child: FilledButton(
                 key: ValueKey('save-${provider.name}-key'),
                 onPressed: saving ? null : onSave,
-                child: Text(saving ? 'Saving…' : 'Save key'),
+                child: Text(saving ? l10n.saving : l10n.saveKey),
               ),
             ),
             const SizedBox(width: AppSpacing.sm),
             OutlinedButton(
               onPressed: hasKey ? onClear : null,
-              child: const Text('Clear'),
+              child: Text(l10n.clear),
             ),
           ],
         ),
         const SizedBox(height: AppSpacing.xs),
         Text(
-          hasKey
-              ? 'Status: key present'
-              : 'Status: no key',
+          hasKey ? l10n.statusKeyPresent : l10n.statusNoKey,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: AppColors.textSecondary,
               ),

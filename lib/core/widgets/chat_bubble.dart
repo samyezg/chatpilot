@@ -1,6 +1,7 @@
 import 'package:chatpilot_app/app/theme/app_colors.dart';
 import 'package:chatpilot_app/app/theme/app_tokens.dart';
 import 'package:chatpilot_app/features/chat/domain/message.dart';
+import 'package:chatpilot_app/l10n/l10n_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -24,7 +25,7 @@ class ChatBubble extends StatelessWidget {
     await Clipboard.setData(ClipboardData(text: text));
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Copied')),
+      SnackBar(content: Text(context.l10n.copied)),
     );
   }
 

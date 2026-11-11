@@ -1,12 +1,12 @@
 /// How ChatPilot picks a speech-to-text backend.
 enum VoiceMode {
-  /// Device STT → OpenAI Whisper → Mock.
-  auto,
-  /// Platform speech recognition with live partials.
+  /// Platform speech recognition with live partials (default — real dictation).
   device,
+  /// Device STT → OpenAI Whisper only (never silent Mock).
+  auto,
   /// Record then OpenAI `/audio/transcriptions` (needs OpenAI key).
   whisper,
-  /// Offline demo stream (no mic / no key).
+  /// Offline demo stream — explicit opt-in only (ignores microphone).
   mock;
 
   String get label => switch (this) {
@@ -18,9 +18,10 @@ enum VoiceMode {
 
   String get subtitle => switch (this) {
         VoiceMode.auto =>
-          'Prefer device streaming; fall back to Whisper, then Mock',
+          'Device streaming, then Whisper — never silent Mock fallback',
         VoiceMode.device => 'Live partials via platform speech recognition',
         VoiceMode.whisper => 'Record → transcribe (listening UI, final on stop)',
-        VoiceMode.mock => 'Simulated streaming dictation for demos / tests',
+        VoiceMode.mock =>
+          'Demo phrase only — ignores microphone (explicit opt-in)',
       };
 }

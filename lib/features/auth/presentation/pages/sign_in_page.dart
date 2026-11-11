@@ -4,6 +4,7 @@ import 'package:chatpilot_app/app/theme/app_tokens.dart';
 import 'package:chatpilot_app/features/auth/domain/auth_exception.dart';
 import 'package:chatpilot_app/features/auth/domain/auth_validators.dart';
 import 'package:chatpilot_app/features/auth/presentation/auth_notifier.dart';
+import 'package:chatpilot_app/l10n/l10n_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -30,15 +31,33 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     super.dispose();
   }
 
+  String? _emailMessage(AuthEmailIssue? issue) {
+    final l10n = context.l10n;
+    return switch (issue) {
+      AuthEmailIssue.empty => l10n.enterEmail,
+      AuthEmailIssue.invalid => l10n.enterValidEmail,
+      null => null,
+    };
+  }
+
+  String? _passwordMessage(AuthPasswordIssue? issue) {
+    final l10n = context.l10n;
+    return switch (issue) {
+      AuthPasswordIssue.empty => l10n.enterPassword,
+      AuthPasswordIssue.tooShort => l10n.passwordTooShort,
+      null => null,
+    };
+  }
+
   Future<void> _submit() async {
-    final emailError = AuthValidators.emailError(_email.text);
-    final passwordError = AuthValidators.passwordError(_password.text);
+    final emailIssue = AuthValidators.emailIssue(_email.text);
+    final passwordIssue = AuthValidators.passwordIssue(_password.text);
     setState(() {
-      _emailError = emailError;
-      _passwordError = passwordError;
+      _emailError = _emailMessage(emailIssue);
+      _passwordError = _passwordMessage(passwordIssue);
       _formError = null;
     });
-    if (emailError != null || passwordError != null) return;
+    if (emailIssue != null || passwordIssue != null) return;
 
     setState(() => _submitting = true);
     try {
@@ -57,20 +76,21 @@ class _SignInPageState extends ConsumerState<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign in')),
+      appBar: AppBar(title: Text(l10n.signIn)),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.md),
         children: [
           Text(
-            'Sync ChatPilot',
+            l10n.syncChatPilot,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w800,
                 ),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Sign in to sync conversations with Supabase. Without an account, chats stay on this device only.',
+            l10n.signInBody,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textSecondary,
                   fontFamily: AppFonts.secondary,
@@ -81,7 +101,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
             controller: _email,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              labelText: 'Email',
+              labelText: l10n.email,
               errorText: _emailError,
             ),
           ),
@@ -90,7 +110,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
             controller: _password,
             obscureText: true,
             decoration: InputDecoration(
-              labelText: 'Password',
+              labelText: l10n.password,
               errorText: _passwordError,
             ),
             onSubmitted: (_) => _submit(),
@@ -106,11 +126,11 @@ class _SignInPageState extends ConsumerState<SignInPage> {
           FilledButton(
             key: const ValueKey('sign-in-submit'),
             onPressed: _submitting ? null : _submit,
-            child: Text(_submitting ? 'Signing in…' : 'Sign in'),
+            child: Text(_submitting ? l10n.signingIn : l10n.signIn),
           ),
           TextButton(
             onPressed: () => context.push(AppRoutes.signUp),
-            child: const Text('Create account'),
+            child: Text(l10n.signUp),
           ),
         ],
       ),

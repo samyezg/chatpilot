@@ -1,6 +1,7 @@
 import 'package:chatpilot_app/app/theme/app_colors.dart';
 import 'package:chatpilot_app/app/theme/app_tokens.dart';
 import 'package:chatpilot_app/features/persona/domain/persona.dart';
+import 'package:chatpilot_app/l10n/l10n_ext.dart';
 import 'package:flutter/material.dart';
 
 class PersonaCard extends StatelessWidget {
@@ -17,6 +18,7 @@ class PersonaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Material(
       color: selected ? AppColors.primary.withValues(alpha: 0.08) : AppColors.surface,
       borderRadius: BorderRadius.circular(AppRadius.lg),
@@ -43,14 +45,14 @@ class PersonaCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        persona.name,
+                        l10n.personaName(persona.id),
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
                       ),
                       const SizedBox(height: AppSpacing.xxs),
                       Text(
-                        persona.subtitle,
+                        l10n.personaSubtitle(persona.id),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: AppColors.textSecondary,
                               fontFamily: AppFonts.secondary,

@@ -14,6 +14,7 @@ import 'package:chatpilot_app/features/persona/domain/persona.dart';
 import 'package:chatpilot_app/features/settings/presentation/settings_notifier.dart';
 import 'package:chatpilot_app/features/voice/domain/voice_session_state.dart';
 import 'package:chatpilot_app/features/voice/presentation/voice_input_controller.dart';
+import 'package:chatpilot_app/l10n/l10n_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -60,12 +61,13 @@ class _ChatPageState extends ConsumerState<ChatPage> {
 
     if (conversation.model.needsApiKey &&
         !ref.read(settingsProvider).hasKeyForModel(conversation.model)) {
+      final l10n = context.l10n;
       final label = conversation.model.provider;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Add a $label API key in Settings first.'),
+          content: Text(l10n.addApiKeyFirst(label)),
           action: SnackBarAction(
-            label: 'Settings',
+            label: l10n.settings,
             onPressed: () => context.push(AppRoutes.settings),
           ),
         ),
@@ -126,9 +128,10 @@ class _ChatPageState extends ConsumerState<ChatPage> {
       }
 
       if (_cancelRequested && mounted) {
+        final l10n = context.l10n;
         final stopped = _streamingText.trim().isEmpty
-            ? '_(generation stopped)_'
-            : '$_streamingText\n\n_(stopped)_';
+            ? l10n.generationStopped
+            : '$_streamingText${l10n.generationStoppedSuffix}';
         ref.read(conversationsProvider.notifier).replaceMessage(
               widget.conversationId,
               placeholder.copyWith(content: stopped),
@@ -136,21 +139,23 @@ class _ChatPageState extends ConsumerState<ChatPage> {
       }
     } on ChatException catch (error) {
       if (!mounted || _cancelRequested) return;
+      final l10n = context.l10n;
       ref.read(conversationsProvider.notifier).replaceMessage(
             widget.conversationId,
-            placeholder.copyWith(content: 'Error: ${error.message}'),
+            placeholder.copyWith(content: l10n.errorPrefix(error.message)),
           );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(error.message)),
       );
     } catch (error) {
       if (!mounted || _cancelRequested) return;
+      final l10n = context.l10n;
       ref.read(conversationsProvider.notifier).replaceMessage(
             widget.conversationId,
-            placeholder.copyWith(content: 'Error: $error'),
+            placeholder.copyWith(content: l10n.errorPrefix('$error')),
           );
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unexpected error: $error')),
+        SnackBar(content: Text(l10n.unexpectedError('$error'))),
       );
     } finally {
       if (mounted) {
@@ -259,18 +264,19 @@ class _ChatPageState extends ConsumerState<ChatPage> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
     });
 
+    final l10n = context.l10n;
     if (conversation == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Chat')),
+        appBar: AppBar(title: Text(l10n.chat)),
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Conversation not found'),
+              Text(l10n.conversationNotFound),
               const SizedBox(height: AppSpacing.md),
               FilledButton(
                 onPressed: () => context.go('/'),
-                child: const Text('Back to list'),
+                child: Text(l10n.backToList),
               ),
             ],
           ),
@@ -290,10 +296,14 @@ class _ChatPageState extends ConsumerState<ChatPage> {
             Text(title, style: const TextStyle(fontSize: 18)),
             Text(
               listening
-                  ? 'Listening · ${voice.engineLabel.isEmpty ? 'Voice' : voice.engineLabel}'
+                  ? l10n.listeningWithEngine(
+                      voice.engineLabel.isEmpty
+                          ? l10n.voiceFallback
+                          : voice.engineLabel,
+                    )
                   : persona == null
                       ? conversation.model.label
-                      : '${persona.icon} ${persona.name}',
+                      : '${persona.icon} ${l10n.personaName(persona.id)}',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: listening ? AppColors.primary : AppColors.textSecondary,
                   ),
@@ -305,7 +315,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
             TextButton(
               key: const ValueKey('voice-cancel'),
               onPressed: () => _cancelVoice(keepPartial: false),
-              child: const Text('Cancel'),
+              child: Text(l10n.cancel),
             ),
           Padding(
             padding: const EdgeInsets.only(right: AppSpacing.sm),

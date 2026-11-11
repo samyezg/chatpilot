@@ -1,0 +1,185 @@
+{
+  "@@locale": "en",
+  "appTitle": "ChatPilot",
+  "settings": "Settings",
+  "newChat": "New",
+  "signIn": "Sign in",
+  "signOut": "Sign out",
+  "signUp": "Create account",
+  "cancel": "Cancel",
+  "save": "Save",
+  "clear": "Clear",
+  "chat": "Chat",
+  "copied": "Copied",
+  "email": "Email",
+  "password": "Password",
+  "title": "Title",
+  "language": "Language",
+  "languageSystem": "System",
+  "languageEnglish": "English",
+  "languageChinese": "中文",
+  "languageSectionHint": "Follow the device language, or lock English / Chinese. Unsupported system languages fall back to English.",
+  "localOnlyBanner": "Local only — sign in to sync",
+  "noConversationsTitle": "No conversations yet",
+  "noConversationsBody": "Tap New to pick a persona and start chatting in Mock mode.",
+  "renameConversation": "Rename conversation",
+  "conversationNotFound": "Conversation not found",
+  "backToList": "Back to list",
+  "listeningWithEngine": "Listening · {engine}",
+  "@listeningWithEngine": {
+    "placeholders": {
+      "engine": {"type": "String"}
+    }
+  },
+  "voiceFallback": "Voice",
+  "addApiKeyFirst": "Add a {provider} API key in Settings first.",
+  "@addApiKeyFirst": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "generationStopped": "_(generation stopped)_",
+  "generationStoppedSuffix": "\n\n_(stopped)_",
+  "errorPrefix": "Error: {message}",
+  "@errorPrefix": {
+    "placeholders": {
+      "message": {"type": "String"}
+    }
+  },
+  "unexpectedError": "Unexpected error: {error}",
+  "@unexpectedError": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "messageHint": "Message…",
+  "listeningHint": "Listening…",
+  "voiceDictation": "Voice dictation",
+  "choosePersona": "Choose a persona",
+  "startChat": "Start chat",
+  "syncChatPilot": "Sync ChatPilot",
+  "signInBody": "Sign in to sync conversations with Supabase. Without an account, chats stay on this device only.",
+  "signingIn": "Signing in…",
+  "joinChatPilot": "Join ChatPilot",
+  "signUpBody": "Email + password. With Supabase configured, this creates a real Auth user for cloud sync.",
+  "passwordHelper": "At least 6 characters",
+  "creatingAccount": "Creating…",
+  "backToSignIn": "Back to sign in",
+  "enterEmail": "Enter your email.",
+  "enterValidEmail": "Enter a valid email.",
+  "enterPassword": "Enter your password.",
+  "passwordTooShort": "Use at least 6 characters.",
+  "accountAndSync": "Account & sync",
+  "supabaseConfigured": "Supabase is configured. Sign in to sync conversations across devices.",
+  "supabaseNotConfigured": "Supabase not configured (local Fake Auth). Pass --dart-define-from-file=.vscode/supabase.local.json to enable cloud sync.",
+  "cloudSyncOn": "Cloud sync on",
+  "localFakeSession": "Local fake session",
+  "syncNow": "Sync now",
+  "syncFinished": "Sync finished",
+  "apiKeys": "API keys",
+  "apiKeysHint": "Keys stay in local SharedPreferences only — never bundled or committed. Each live model needs its own provider key.",
+  "apiKeyLabel": "{provider} API key",
+  "@apiKeyLabel": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "saveKey": "Save key",
+  "saving": "Saving…",
+  "statusKeyPresent": "Status: key present",
+  "statusNoKey": "Status: no key",
+  "apiKeySaved": "{provider} API key saved on this device",
+  "@apiKeySaved": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "apiKeyCleared": "{provider} API key cleared",
+  "@apiKeyCleared": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "voiceDictationSection": "Voice dictation",
+  "voiceDictationHint": "Real dictation by default (Device STT). Auto may use Whisper next. Mock (demo) is explicit only — never a silent fallback.",
+  "voiceEngine": "Voice engine",
+  "voiceModeAuto": "Auto",
+  "voiceModeDevice": "Device STT",
+  "voiceModeWhisper": "OpenAI Whisper",
+  "voiceModeMock": "Mock (demo)",
+  "voiceModeAutoSubtitle": "Device streaming, then Whisper — never silent Mock fallback",
+  "voiceModeDeviceSubtitle": "Live partials via platform speech recognition",
+  "voiceModeWhisperSubtitle": "Record → transcribe (listening UI, final on stop)",
+  "voiceModeMockSubtitle": "Demo phrase only — ignores microphone (explicit opt-in)",
+  "localData": "Local data",
+  "localDataHint": "Conversations are saved on this device (SharedPreferences). Restart keeps your chats.",
+  "resetDemo": "Reset to demo conversations",
+  "resetDemoDone": "Reset to demo conversations",
+  "modelsSection": "Models",
+  "modelStatusLiveKeyPresent": "{provider} · live SSE · key present",
+  "@modelStatusLiveKeyPresent": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "modelStatusLiveAddKey": "{provider} · live SSE · add key to use",
+  "@modelStatusLiveAddKey": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "modelStatusOfflineMock": "{provider} · offline mock stream",
+  "@modelStatusOfflineMock": {
+    "placeholders": {
+      "provider": {"type": "String"}
+    }
+  },
+  "justNow": "Just now",
+  "minutesAgo": "{count}m ago",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "hoursAgo": "{count}h ago",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "yesterday": "Yesterday",
+  "daysAgo": "{count}d ago",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "personaGeneralName": "General",
+  "personaGeneralSubtitle": "Everyday Q&A",
+  "personaTranslatorName": "Translator",
+  "personaTranslatorSubtitle": "Chinese ↔ English",
+  "personaWriterName": "Writer",
+  "personaWriterSubtitle": "Polish / expand / shorten",
+  "personaEngineerName": "Engineer",
+  "personaEngineerSubtitle": "Explain / review / debug",
+  "personaTutorName": "Tutor",
+  "personaTutorSubtitle": "Quiz / teach / summarize",
+  "seedTranslatorTitle": "Translator",
+  "seedEngineerTitle": "Code review",
+  "seedWriterTitle": "Writer",
+  "seedGeneralTitle": "General chat",
+  "seedTranslatorUser1": "Please translate: The weather is really nice today.",
+  "seedTranslatorUser2": "Polish it a bit — make it more natural.",
+  "seedEngineerUser1": "Does this Dart have a null risk? `user!.name`",
+  "seedEngineerAssistant1": "Yes. Prefer `user?.name` or a null check to avoid a runtime crash.",
+  "seedEngineerUser2": "Show a safer example.",
+  "seedEngineerAssistant2": "```dart\nfinal name = user?.name ?? \"Guest\";\n```",
+  "seedWriterUser1": "Help me polish this email opening.",
+  "seedWriterAssistant1": "Hi Alex — quick note to follow up on yesterday’s demo.",
+  "seedWriterUser2": "Make it a bit more formal.",
+  "seedWriterAssistant2": "Dear Alex, I am writing to follow up on our demonstration yesterday.",
+  "seedGeneralUser1": "What can ChatPilot do?",
+  "seedGeneralAssistant1": "Chat, switch personas, and sync history when signed in. Demo seeds start in Mock mode.",
+  "seedGeneralUser2": "Nice — keep going.",
+  "mockSttPhrase": "Hello, this is the ChatPilot streaming dictation demo."
+}
