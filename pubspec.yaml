@@ -1,0 +1,48 @@
+name: chatpilot_app
+description: ChatPilot — multi-model AI chat assistant (Riverpod + optional Supabase).
+publish_to: "none"
+version: 1.0.0+9
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^3.3.1
+  go_router: ^17.2.3
+  intl: ^0.20.2
+  http: ^1.2.0
+  shared_preferences: ^2.2.0
+  flutter_markdown: ^0.7.0
+  supabase_flutter: ^2.12.4
+  speech_to_text: ^7.5.0
+  record: ^7.1.2
+  path_provider: ^2.1.6
+  path: ^1.9.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.1
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/chatpilot_icon.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/icons/chatpilot_icon.png"
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Plus Jakarta Sans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Variable.ttf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Variable.ttf
